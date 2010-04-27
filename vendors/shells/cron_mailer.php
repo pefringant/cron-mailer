@@ -83,8 +83,7 @@ class CronMailerShell extends Shell {
 			$this->Mailer->textContent      = $email['QueuedEmail']['textMessage'];
 			
 			if ($this->Mailer->send()) {
-				//$this->QueuedEmail->delete($email['QueuedEmail']['id']);
-				$this->out("Email sent to ".$email['QueuedEmail']['to']);
+				$this->QueuedEmail->delete($email['QueuedEmail']['id']);
 			}
 			
 			$this->Mailer->reset();
@@ -94,7 +93,7 @@ class CronMailerShell extends Shell {
 /**
  * Overrides _welcome function for silent execution
  */
-	/*function _welcome() {
+	function _welcome() {
 
-	}*/
+	}
 }

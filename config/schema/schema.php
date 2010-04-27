@@ -1,8 +1,8 @@
 <?php 
 /* SVN FILE: $Id$ */
 /* Cames schema generated on: 2010-04-27 10:04:30 : 1272355350*/
-class CronMailerSchema extends CakeSchema {
-	var $name = 'CronMailer';
+class QueueSchema extends CakeSchema {
+	var $name = 'Queue';
 
 	function before($event = array()) {
 		return true;

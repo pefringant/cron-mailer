@@ -1,0 +1,101 @@
+h1. CronMailer Cakephp plugin
+
+This plugin provides an easy to install solution to manage a queue of emails to be sent by a Cron job. It has been tested on version 1.3 only.
+
+**Features :**
+* Includes an EmailQueueComponent to manage the message queue. It works exactly like the EmailComponent from the CakePHP core, but instead of sending the emails, saves them in the database.
+* Includes a Shell to be executed with the CakePHP console, manually or from a Cron job.
+
+h1. 1. Installation
+
+h2. 1.1 Files
+
+To install, copy the 'cron_mailer' directory to the 'plugins' folder:
+
+<pre><code>git clone git://github.com/kalt/cron-mailer.git cron_mailer</code></pre>
+
+Or click 'download' and copy the content of the compressed file into your 'plugins' folder.
+
+h2. 1.2. DB Table
+
+Create the db table from the migration schema in cron_mailer/config/schema/schema.php :
+
+<pre><code>cake schema create queue -plugin cron_mailer</code></pre>
+
+ or from the sql dump in cron_mailer/config/sql/cron_mailer.sql.
+ 
+h1. 2. Setup
+
+Consider a simple blog app, where we need to alert subscribers everytime a new post is published. If the number of subscribers is too high, the hosting may not allow so many emails to be sent.
+
+h2. 2.1 EmailQueueComponent
+
+Instead of using the normal EmailComponent from the core, we are going to use the EmailQueueComponent from the plugin. It can be configured like the EmailComponent, except for the 'delivery' parameter, wich must be set to 'db' (or not set at all). 
+
+<pre><code>class PostsController extends AppController {
+	var $components = array('CronMailer.EmailQueue');
+	
+	function add()
+	{
+		// Here the logic to add a new Post
+		// ...
+		if ($post = $this->Post->save()) {
+			// Retrieve the subscribers
+			$this->loadModel('Subscriber');
+			$subscribers = $this->Subscriber->find('all');
+			
+			// New post data made available to the email views
+			$this->set('post', $post);
+			
+			// Component setup
+			$this->EmailQueue->to = Set::extract('/Subscriber/email', $subscribers);
+			$this->EmailQueue->from = 'admin@example.com';
+			$this->EmailQueue->subject = "New post: " . $post['Post']['title'];
+			$this->EmailQueue->template = 'new_post';
+			$this->EmailQueue->sendAs = 'both';
+			$this->EmailQueue->delivery = 'db';
+			$this->EmailQueue->send();
+			
+			// logic continued
+		}
+	}
+}</code></pre>
+
+Note that if you need to customize the email content itself ("Dear {subscriber's name}...", just loop on the subscribers array and call $this->EmailQueue->reset() at the end of the loop.
+
+h2. 2.2. CronMailer Shell
+
+h3. 2.2.1. Setup
+
+Now that the queue of awaiting emails has been filled, we can configure the CronMailer shell. Again, the available settings are very close to the core EmailComponent, with only one new parameter, 'limit', which is the number of emails to be sent on each execution of the shell. Check you hosting offer to configure the limit accordingly.
+
+The shell settings must be declared in a config file : APP/config/cron_mailer.php, with the following structure (here with all the default settings) :
+
+<pre><code><?php
+$config['CronMailer'] = array(
+	'charset' => 'utf-8',
+	'sendAs' => 'both',
+	'delivery' => 'mail',
+	'xMailer' => 'CakePHP Email Component',
+	'filePaths' => array(),
+	'smtpOptions' => array(
+		'port'=> 25, 
+		'host' => 'localhost', 
+		'timeout' => 30
+	),
+	'messageId' => true,
+	'limit' => 50,
+);
+?></code></pre>
+
+Note that this step is not required, if the default settings are convenients to you, just don't create the config file.
+
+h3. 2.2.2 Execution
+
+We can now create a new Cron job to call the CakePHP console :
+<pre><code>cake cron_mailer -app /full/path/to/app</code></pre>
+
+More information in the Cookbook about "Running Shells as cronjobs":http://book.cakephp.org/view/846/Running-Shells-as-cronjobs.
+ 
+ 
+
