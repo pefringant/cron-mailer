@@ -88,11 +88,11 @@ $config['CronMailer'] = array(
 );
 ?></code></pre>
 
-Note that this step is not required, if the default settings are convenients to you, just don't create the config file.
+Note that this step is not required, if the default settings are convenient to you, just don't create the config file.
 
 h3. 2.2.2 Execution
 
-We can now create a new Cron job to call the CakePHP console :
+We can now add the following command to the crontab file :
 <pre><code>cake cron_mailer -app /full/path/to/app</code></pre>
 
 More information in the Cookbook about "Running Shells as cronjobs":http://book.cakephp.org/view/846/Running-Shells-as-cronjobs.
