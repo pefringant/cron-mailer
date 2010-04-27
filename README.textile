@@ -67,7 +67,7 @@ h2. 2.2. CronMailer Shell
 
 h3. 2.2.1. Setup
 
-Now that the queue of awaiting emails has been filled, we can configure the CronMailer shell. Again, the available settings are very close to the core EmailComponent, with only one new parameter, 'limit', which is the number of emails to be sent on each execution of the shell. Check you hosting offer to configure the limit accordingly.
+Now that the queue of awaiting emails has been filled, we can configure the CronMailer shell. Again, the available settings are very close to the core EmailComponent, with only one new parameter, 'limit', which is the number of emails to be sent on each execution of the shell. Check your hosting offer to configure the limit accordingly.
 
 The shell settings must be declared in a config file : APP/config/cron_mailer.php, with the following structure (here with all the default settings) :
 
