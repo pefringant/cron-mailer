@@ -26,7 +26,7 @@ Create the db table from the migration schema in cron_mailer/config/schema/schem
  
 h1. 2. Setup
 
-Consider a simple blog app, where we need to alert subscribers everytime a new post is published. If the number of subscribers is too high, the hosting may not allow so many emails to be sent.
+Consider a simple blog app, where we need to alert subscribers everytime a new post is published. If the number of subscribers is too high, the hosting provider may not allow so many emails to be sent.
 
 h2. 2.1 EmailQueueComponent
 
