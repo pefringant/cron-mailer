@@ -50,9 +50,9 @@ class CronMailerShell extends Shell {
 			$this->settings = array_merge($this->settings, Configure::read('CronMailer'));
 		}
 		
-		App::import('Component', 'CronMailer.Mailer');
+		App::import('Component', 'CronMailer.CronMailer');
 		
-		$this->Mailer =& new MailerComponent();
+		$this->CronMailer =& new CronMailerComponent();
 	}
 	
 /**
@@ -65,28 +65,28 @@ class CronMailerShell extends Shell {
 			exit;
 		}
 
-		$this->Mailer->_set($this->settings);
+		$this->CronMailer->_set($this->settings);
 		
-		$this->Mailer->template = 'dummy'; // required to trigger the _render function in the MailerComponent
+		$this->CronMailer->template = 'dummy'; // required to trigger the _render function in the CronMailerComponent
 		
 		foreach ($queue as $email) {
-			$this->Mailer->to               = $email['QueuedEmail']['to'];
-			$this->Mailer->from             = $email['QueuedEmail']['from'];
-			$this->Mailer->replyTo          = $email['QueuedEmail']['replyTo'];
-			$this->Mailer->readReceipt      = $email['QueuedEmail']['readReceipt'];
-			$this->Mailer->return           = $email['QueuedEmail']['return'];
-			$this->Mailer->headers          = unserialize($email['QueuedEmail']['headers']);
-			$this->Mailer->additionalParams = unserialize($email['QueuedEmail']['additionalParams']);
-			$this->Mailer->attachments      = unserialize($email['QueuedEmail']['attachments']);
-			$this->Mailer->subject          = $email['QueuedEmail']['subject'];
-			$this->Mailer->htmlContent      = $email['QueuedEmail']['htmlMessage'];
-			$this->Mailer->textContent      = $email['QueuedEmail']['textMessage'];
+			$this->CronMailer->to               = $email['QueuedEmail']['to'];
+			$this->CronMailer->from             = $email['QueuedEmail']['from'];
+			$this->CronMailer->replyTo          = $email['QueuedEmail']['replyTo'];
+			$this->CronMailer->readReceipt      = $email['QueuedEmail']['readReceipt'];
+			$this->CronMailer->return           = $email['QueuedEmail']['return'];
+			$this->CronMailer->headers          = unserialize($email['QueuedEmail']['headers']);
+			$this->CronMailer->additionalParams = unserialize($email['QueuedEmail']['additionalParams']);
+			$this->CronMailer->attachments      = unserialize($email['QueuedEmail']['attachments']);
+			$this->CronMailer->subject          = $email['QueuedEmail']['subject'];
+			$this->CronMailer->htmlContent      = $email['QueuedEmail']['htmlMessage'];
+			$this->CronMailer->textContent      = $email['QueuedEmail']['textMessage'];
 			
-			if ($this->Mailer->send()) {
+			if ($this->CronMailer->send()) {
 				$this->QueuedEmail->delete($email['QueuedEmail']['id']);
 			}
 			
-			$this->Mailer->reset();
+			$this->CronMailer->reset();
 		}
 	}
 	
