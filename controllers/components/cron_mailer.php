@@ -24,6 +24,11 @@ class CronMailerComponent extends EmailComponent {
  * @access private
  */
 	function _render() {
+		$msg = array();
+		
+		$htmlContent = explode("\n", $this->htmlContent);
+		$textContent = explode("\n", $this->textContent);
+
 		if ($this->sendAs === 'both') {
 			if (!empty($this->attachments)) {
 				$msg[] = '--' . $this->__boundary;
@@ -35,7 +40,7 @@ class CronMailerComponent extends EmailComponent {
 			$msg[] = 'Content-Transfer-Encoding: 7bit';
 			$msg[] = '';
 
-			$msg = array_merge($msg, explode("\n", $this->textContent));
+			$msg = array_merge($msg, $textContent);
 
 			$msg[] = '';
 			$msg[] = '--alt-' . $this->__boundary;
@@ -43,7 +48,7 @@ class CronMailerComponent extends EmailComponent {
 			$msg[] = 'Content-Transfer-Encoding: 7bit';
 			$msg[] = '';
 
-			$msg = array_merge($msg, explode("\n", $this->htmlContent));
+			$msg = array_merge($msg, $htmlContent);
 			
 			$msg[] = '';
 			$msg[] = '--alt-' . $this->__boundary . '--';
@@ -69,7 +74,7 @@ class CronMailerComponent extends EmailComponent {
 		
 		$varName = $this->sendAs . 'Content';
 
-		$msg = array_merge($msg, explode("\n", $this->$varName));
+		$msg = array_merge($msg, ${$varName});
 
 		return $msg;
 	}

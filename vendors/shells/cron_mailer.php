@@ -67,8 +67,6 @@ class CronMailerShell extends Shell {
 
 		$this->CronMailer->_set($this->settings);
 		
-		$this->CronMailer->template = 'dummy'; // required to trigger the _render function in the CronMailerComponent
-		
 		foreach ($queue as $email) {
 			$this->CronMailer->to               = $email['QueuedEmail']['to'];
 			$this->CronMailer->from             = $email['QueuedEmail']['from'];
@@ -81,6 +79,7 @@ class CronMailerShell extends Shell {
 			$this->CronMailer->subject          = $email['QueuedEmail']['subject'];
 			$this->CronMailer->htmlContent      = $email['QueuedEmail']['htmlMessage'];
 			$this->CronMailer->textContent      = $email['QueuedEmail']['textMessage'];
+			$this->CronMailer->template         = 'dummy'; // required to trigger the _render function in the CronMailerComponent
 			
 			if ($this->CronMailer->send()) {
 				$this->QueuedEmail->delete($email['QueuedEmail']['id']);
