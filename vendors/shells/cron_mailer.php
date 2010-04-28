@@ -34,11 +34,11 @@ class CronMailerShell extends Shell {
 	);
 	
 /**
- * Mailer component handler
+ * CronMailer component handler
  * 
  * @var object
  */
-	var $Mailer = null;
+	var $CronMailer = null;
 	
 /**
  * Initialize shell
