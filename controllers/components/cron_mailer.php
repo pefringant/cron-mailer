@@ -78,4 +78,16 @@ class CronMailerComponent extends EmailComponent {
 
 		return $msg;
 	}
+	
+/**
+ * Reset all CronMailerComponent internal variables to be able to send out a new email.
+ *
+ * @access public
+ */
+	function reset() {
+		$this->htmlContent = '';
+		$this->textContent = '';
+		
+		parent::reset();
+	}
 }
